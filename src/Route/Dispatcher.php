@@ -19,10 +19,15 @@ class Dispatcher extends ControllerDispatcher
     {
         $arrangedParameters = [];
 
+        $skippableValue = new \stdClass;
 
         foreach ($reflector->getParameters() as $key => $parameter) {
-            if (array_key_exists($parameter->getName(), $parameters)) {
-                $arrangedParameters[$parameter->getName()] = $parameters[$parameter->getName()];
+            $instance = $this->transformDependency($parameter, $parameters, $skippableValue);
+
+            if ($instance !== $skippableValue) {
+                $arrangedParameters[$parameter->getName()] = $instance;
+            } else if($parameter->isDefaultValueAvailable()) {
+                $arrangedParameters[$parameter->getName()] = $parameter->getDefaultValue();
             }
         }
 
