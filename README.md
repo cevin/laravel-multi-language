@@ -28,7 +28,7 @@ class SomeController extends Controller
     }
     
     // For route: /{a}/{b}/{c}
-    // ⚠️ The number of parameters does not match the number of variables defined in the route.
+    // ❗️ The number of parameters does not match the number of variables defined in the route.
     public function method($a, $b)
     {
         $c = func_get_args()[2];
@@ -46,15 +46,20 @@ class SomeController extends Controller
 ## Usage
 
 ```php
+// AppServiceProvider::boot
 URL::defaults(['locale' => 'en-us']);
+// route('home.test', ['name'=>'hello']) => /en-us/hello
+// route('home.test', ['name'=>'hello', 'locale'=>'fr']) => /fr/hello
 ```
 
 ```php
-Route::group([
-    'prefix' => '/{locale}',
-], function (\Illuminate\Routing\Router $router) {
-    $router->get('/{name}', 'Home@test')->name('home.test');
-});
+use \Illuminate\Support\Facades\Route;
+
+Route::prefix('/{locale?}')
+    ->whereIn('locale', ['en-us', 'fr', 'zh-CN', 'zh-HK'])
+    ->group(function (\Illuminate\Routing\Router $router) {
+        $router->get('/{name}', 'Home@test')->name('home.test');
+    });
 ```
 
 ```php
