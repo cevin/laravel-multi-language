@@ -51,7 +51,7 @@ URL::defaults(['locale' => 'en-us']);
 
 ```php
 Route::group([
-    'prefix' => '/{locale?}',
+    'prefix' => '/{locale}',
 ], function (\Illuminate\Routing\Router $router) {
     $router->get('/{name}', 'Home@test')->name('home.test');
 });
