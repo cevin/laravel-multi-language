@@ -1,0 +1,29 @@
+{
+    "name": "cevin/laravel-multi-language",
+    "description": "Laravel Multi Language Route Support",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "laravel/framework": "^10|^11"
+    },
+    "authors": [
+        {
+            "name": "cevin",
+            "email": "cevin.cheung@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cevin\\LaravelMultiLanguage\\": "src/"
+        },
+        "exclude-from-classmap": ["**/.git"]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cevin\\LaravelMultiLanguage\\ServiceProvider"
+            ]
+        }
+    }
+}
