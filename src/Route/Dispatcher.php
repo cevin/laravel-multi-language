@@ -26,8 +26,8 @@ class Dispatcher extends ControllerDispatcher
 
             if ($instance !== $skippableValue) {
                 $arrangedParameters[$parameter->getName()] = $instance;
-            } else if($parameter->isDefaultValueAvailable()) {
-                $arrangedParameters[$parameter->getName()] = $parameter->getDefaultValue();
+            } else {
+                $arrangedParameters[$parameter->getName()] = array_key_exists($parameter->getName(), $parameters) ? $parameters[$parameter->getName()] : ($parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null);
             }
         }
 

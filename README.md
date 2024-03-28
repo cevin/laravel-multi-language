@@ -19,26 +19,35 @@ class SomeController extends Controller
         $b = func_get_args()[1];
         $c = func_get_args()[2];
     }
-    
+
     // For route: /{a}/{b}/{c}
     // ❌ Parameter name does not match the variable name defined in the route.
     public function method($aa, $bb, $cc)
     {
         // ....
     }
-    
+
     // For route: /{a}/{b}/{c}
     // ❗️ The number of parameters does not match the number of variables defined in the route.
     public function method($a, $b)
     {
         $c = func_get_args()[2];
     }
-    
+
     // For route: /{a}/{b}/{c}
     // ✅
     public function method($a, $b, $c)
     {
         // .....
+    }
+
+    // For route: /{a}/{b}/{c}
+    // ✅
+    public function method($c, $a, $b)
+    {
+        return $c.'-'.$a.'-'.$b;
+        // /a/b/c
+        // output: c-a-b
     }
 }
 ```
