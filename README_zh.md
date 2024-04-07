@@ -2,17 +2,17 @@
 
 ## WARNING
 
-The routing dispatch strategy will be affected, do not apply to production environment without sufficient testing. 
+会影响路由调度策略。在充分测试前请勿用于生产环境。
 
-All parameters must be explicitly defined in the method's parameter list, and the parameter names must match those defined in the route.
+所有路由参数都必须显式定义在方法参数列表中，并且参数名称必须和路由定义的占位符名称一致。
 
-The following call may have an impact.
+一些举例
 
 ```php
 class SomeController extends Controller
 {
-    // For route: /{a}/{b}/{c}
-    // ❌ Method's parameter list is empty.
+    // 路由: /{a}/{b}/{c}
+    // ❌ 方法参数列表为空
     public function method()
     {
         $a = func_get_args()[0];
@@ -20,29 +20,29 @@ class SomeController extends Controller
         $c = func_get_args()[2];
     }
 
-    // For route: /{a}/{b}/{c}
-    // ❌ Parameter name does not match the variable name defined in the route.
+    // 路由: /{a}/{b}/{c}
+    // ❌ 参数名称和路由定义占位符名称不一致
     public function method($aa, $bb, $cc)
     {
         // ....
     }
 
-    // For route: /{a}/{b}/{c}
-    // ❗️ The number of parameters does not match the number of variables defined in the route.
+    // 路由: /{a}/{b}/{c}
+    // ❗ 方法参数数量和路由定义中的参数数量不一致
     public function method($a, $b)
     {
         $c = func_get_args()[2];
     }
 
-    // For route: /{a}/{b}/{c}
-    // ✅
+    // 路由: /{a}/{b}/{c}
+    // ✅ 正确
     public function method($a, $b, $c)
     {
         // .....
     }
 
-    // For route: /{a}/{b}/{c}
-    // ✅
+    // 路由: /{a}/{b}/{c}
+    // ✅ 允许顺序不一致
     public function method($c, $a, $b)
     {
         return $c.'-'.$a.'-'.$b;
@@ -52,24 +52,21 @@ class SomeController extends Controller
 }
 ```
 
-## Usage
+## 使用举例
 
 ```php
-// AppServiceProvider::boot
+// 在 AppServiceProvider::boot
+// 设置生成路由默认locale值
 URL::defaults(['locale' => 'en-us']);
 // route('home.test', ['name'=>'hello']) => /en-us/hello
 // route('home.test', ['name'=>'hello', 'locale'=>'fr']) => /fr/hello
-
-// global middleware
-...
-app()->setLocale($request->route('locale', '...'))
-$request->setLocale($request->route('locale', '...'))
-...
 ```
 
 ```php
 use \Illuminate\Support\Facades\Route;
 
+// 定义路由组并且有一个可选的locale占位符
+// 可以使用路由 /en-us/name   /name
 Route::prefix('/{locale?}')
     ->whereIn('locale', ['en-us', 'fr', 'zh-CN', 'zh-HK'])
     ->group(function (\Illuminate\Routing\Router $router) {
